@@ -9,3 +9,15 @@ class GetMoviesRequest {
         'page': page,
       };
 }
+
+class GetMovieRequest {
+  final int movieId;
+
+  GetMovieRequest({
+    required this.movieId,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'movie_id': movieId,
+      };
+}

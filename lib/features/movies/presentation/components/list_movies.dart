@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:swissflix/core/utils/constants/enums.dart';
+import 'package:swissflix/features/movies/data/models/movies.dart';
 import 'package:swissflix/features/movies/data/models/request/movies_request.dart';
-import 'package:swissflix/features/movies/data/models/responses/movies_responses.dart';
 import 'package:swissflix/features/movies/presentation/bloc/movies_bloc.dart';
 import 'package:swissflix/features/movies/presentation/widgets/card_movie.dart';
 

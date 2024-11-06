@@ -6,3 +6,8 @@ class GetMoviesEvent extends MoviesEvent {
   final GetMoviesRequest getMoviesRequest;
   GetMoviesEvent({required this.getMoviesRequest});
 }
+
+class GetMovieEvent extends MoviesEvent {
+  final GetMovieRequest getMovieRequest;
+  GetMovieEvent({required this.getMovieRequest});
+}

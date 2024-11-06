@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:swissflix/core/utils/constants/enums.dart';
 import 'package:swissflix/core/utils/constants/urls.dart';
+import 'package:swissflix/features/movies/data/models/request/movies_request.dart';
 import 'package:swissflix/features/movies/presentation/bloc/movies_bloc.dart';
 import 'package:swissflix/routes/router.dart';
 import 'package:swissflix/styles/custom_colors.dart';
@@ -16,11 +18,32 @@ class MoviePage extends StatefulWidget {
 
 class _MoviePageState extends State<MoviePage> {
   @override
+  void initState() {
+    context.read<MoviesBloc>().add(
+          GetMovieEvent(
+            getMovieRequest: GetMovieRequest(
+              movieId: int.parse(widget.movieId),
+            ),
+          ),
+        );
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<MoviesBloc, MoviesState>(
       builder: (context, state) {
-        var movie = state.getMoviesService.requestResponse?.movies
-            .firstWhere((movie) => movie.id == int.parse(widget.movieId));
+        print(state.getMovieService.requestStatus);
+        if (state.getMovieService.requestStatus == RequestStatus.initial) {
+          return Container();
+        }
+
+        if (state.getMovieService.requestStatus == RequestStatus.loading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        var movie = state.getMovieService.requestResponse?.movie;
         return Scaffold(
           appBar: AppBar(
             title: Text(
@@ -37,7 +60,7 @@ class _MoviePageState extends State<MoviePage> {
                 if (router.canPop()) {
                   router.pop(context);
                 } else {
-                  router.pushNamed(NamesRoustes.movies);
+                  router.replace(NamesRoustes.movies);
                 }
               },
             ),
@@ -57,7 +80,7 @@ class _MoviePageState extends State<MoviePage> {
                         color: CustomColors.primary,
                         borderRadius: BorderRadius.circular(10.0),
                         image: DecorationImage(
-                          image: NetworkImage("$imgurl${movie?.backdropPath}"),
+                          image: NetworkImage("$imgurl${movie?.posterPath}"),
                           fit: BoxFit.cover,
                         ),
                       ),

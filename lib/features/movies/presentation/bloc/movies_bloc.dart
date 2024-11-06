@@ -17,6 +17,7 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
 
   MoviesBloc() : super(MoviesState()) {
     on<GetMoviesEvent>(getMovies);
+    on<GetMovieEvent>(getMovie);
   }
 
   FutureOr<void> getMovies(
@@ -59,6 +60,55 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
       (error) {
         emit(state.copyWith(
           getMoviesService: state.getMoviesService.copyWith(
+            requestStatus: RequestStatus.failed,
+            failure: Failure(message: error.toString()),
+          ),
+        ));
+      },
+    );
+  }
+
+  FutureOr<void> getMovie(
+    GetMovieEvent event,
+    Emitter<MoviesState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        getMovieService: state.getMovieService.copyWith(
+          requestStatus: RequestStatus.loading,
+        ),
+      ),
+    );
+    await moviesApi
+        .getMovie(getMovieRequest: event.getMovieRequest)
+        .then((either) async {
+      either.fold(
+        (failure) {
+          emit(
+            state.copyWith(
+              getMovieService: state.getMovieService.copyWith(
+                requestStatus: RequestStatus.failed,
+                failure: failure,
+              ),
+            ),
+          );
+        },
+        (response) async {
+          print(response);
+          emit(
+            state.copyWith(
+              getMovieService: state.getMovieService.copyWith(
+                requestStatus: RequestStatus.success,
+                requestResponse: response,
+              ),
+            ),
+          );
+        },
+      );
+    }).catchError(
+      (error) {
+        emit(state.copyWith(
+          getMovieService: state.getMovieService.copyWith(
             requestStatus: RequestStatus.failed,
             failure: Failure(message: error.toString()),
           ),

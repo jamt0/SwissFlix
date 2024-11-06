@@ -17,4 +17,14 @@ class MoviesApi {
       mapper: (data) => GetMoviesResponse.fromJson(data["data"]),
     );
   }
+
+  Future<Either<Failure, GetMovieResponse>> getMovie({
+    required GetMovieRequest getMovieRequest,
+  }) {
+    return apiHandler.get<GetMovieResponse>(
+      secured: true,
+      endpoint: "/movie/${getMovieRequest.movieId}?language=en-US",
+      mapper: (data) => GetMovieResponse.fromJson(data["data"]),
+    );
+  }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swissflix/core/utils/constants/urls.dart';
-import 'package:swissflix/features/movies/data/models/responses/movies_responses.dart';
+import 'package:swissflix/features/movies/data/models/movies.dart';
 import 'package:swissflix/routes/router.dart';
 import 'package:swissflix/styles/custom_colors.dart';
 import 'package:swissflix/styles/custom_text_styles.dart';
@@ -54,7 +54,7 @@ class _CardMovieState extends State<CardMovie> {
                   borderRadius: BorderRadius.circular(10.0),
                   image: DecorationImage(
                     image: NetworkImage(widget.movie.backdropPath != null
-                        ? "$imgurl${widget.movie.backdropPath}"
+                        ? "$imgurl${widget.movie.posterPath}"
                         : " "),
                     fit: BoxFit.cover,
                   ),
