@@ -86,7 +86,6 @@ class ApiHandler {
   Future<Options> getRequestOptions({required bool secured}) async {
     Map<String, String> requestHeaders;
 
-    //TODO: Poner en el .env
     requestHeaders = {
       'Authorization':
           'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMjYxZmM4MjY4ZTlmMjk5ZTU1ZGEwZDFmZDVlNjQ2NyIsIm5iZiI6MTczMDc4MDAyOS44NTc1NzE4LCJzdWIiOiI2NzI5OTk2NWViMGZkZDljZDg0YjE1MDIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.Z4aGj9KwZOtiz4fmV6_ZXv1o5MenLvALQCeueN4vRVk'

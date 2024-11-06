@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:swissflix/features/movies/data/api/movies_api.dart';
 import 'package:swissflix/features/movies/presentation/bloc/movies_bloc.dart';
 import 'package:swissflix/routes/router.dart';
 import 'package:swissflix/styles/custom_colors.dart';
@@ -7,13 +8,12 @@ import 'package:swissflix/styles/custom_colors.dart';
 class App extends StatelessWidget {
   const App({super.key});
 
-  //TODO: Inyeccion de dependencias
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => MoviesBloc(),
+          create: (context) => MoviesBloc(MoviesApi.instance),
         ),
       ],
       child: MaterialApp.router(

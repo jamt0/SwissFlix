@@ -5,7 +5,9 @@ import 'package:swissflix/features/movies/data/models/request/movies_request.dar
 import 'package:swissflix/features/movies/data/models/responses/movies_responses.dart';
 
 class MoviesApi {
-  //TODO: Inyeccion de dependencias
+  static final MoviesApi _instance = MoviesApi();
+  static MoviesApi get instance => _instance;
+
   ApiHandler apiHandler = ApiHandler();
 
   Future<Either<Failure, GetMoviesResponse>> getMovies({

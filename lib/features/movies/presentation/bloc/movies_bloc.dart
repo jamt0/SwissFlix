@@ -12,10 +12,9 @@ part 'movies_event.dart';
 part 'movies_state.dart';
 
 class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
-  //TODO: Inyecccion de dependecias
-  final moviesApi = MoviesApi();
+  final MoviesApi moviesApi;
 
-  MoviesBloc() : super(MoviesState()) {
+  MoviesBloc(this.moviesApi) : super(MoviesState()) {
     on<GetMoviesEvent>(getMovies);
     on<GetMovieEvent>(getMovie);
   }
