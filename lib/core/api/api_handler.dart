@@ -1,14 +1,12 @@
-import 'dart:collection';
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:swissflix/core/failure.dart';
-
-//TODO: configurar url
+import 'package:swissflix/core/utils/constants/urls.dart';
 
 class ApiHandler {
-  final String _baseUrl = "https://api.themoviedb.org/3";
+  final String _baseUrl = apiurl;
   final Dio _dio = createDio();
 
   Future<Either<Failure, T>> post<T>({
@@ -86,13 +84,21 @@ class ApiHandler {
   }
 
   Future<Options> getRequestOptions({required bool secured}) async {
-    var requestHeaders = HashMap<String, String>();
+    Map<String, String> requestHeaders;
+
+    //TODO: Poner en el .env
+    requestHeaders = {
+      'Authorization':
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMjYxZmM4MjY4ZTlmMjk5ZTU1ZGEwZDFmZDVlNjQ2NyIsIm5iZiI6MTczMDc4MDAyOS44NTc1NzE4LCJzdWIiOiI2NzI5OTk2NWViMGZkZDljZDg0YjE1MDIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.Z4aGj9KwZOtiz4fmV6_ZXv1o5MenLvALQCeueN4vRVk'
+    };
 
     if (secured) {
-      //Get token
+      return Options(
+        headers: requestHeaders,
+        responseType: ResponseType.json,
+      );
     }
     return Options(
-      headers: requestHeaders,
       responseType: ResponseType.json,
     );
   }

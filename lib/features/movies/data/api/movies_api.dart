@@ -4,17 +4,17 @@ import 'package:swissflix/core/failure.dart';
 import 'package:swissflix/features/movies/data/models/request/movies_request.dart';
 import 'package:swissflix/features/movies/data/models/responses/movies_responses.dart';
 
-class PostApi {
+class MoviesApi {
   //TODO: Inyeccion de dependencias
   ApiHandler apiHandler = ApiHandler();
 
   Future<Either<Failure, GetMoviesResponse>> getMovies({
-    required GetMoviesRequest getPostsRequest,
+    required GetMoviesRequest getMoviesRequest,
   }) {
     return apiHandler.get<GetMoviesResponse>(
-      endpoint: "/movie/popular?language=en-US&page=${getPostsRequest.page}",
-      //TODO: Verificar data
-      mapper: (data) => GetMoviesResponse.fromJson({"movies": data["data"]}),
+      secured: true,
+      endpoint: "/movie/popular?language=en-US&page=${getMoviesRequest.page}",
+      mapper: (data) => GetMoviesResponse.fromJson(data["data"]),
     );
   }
 }
