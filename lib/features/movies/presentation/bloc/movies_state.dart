@@ -1,28 +1,29 @@
 part of 'movies_bloc.dart';
 
 class MoviesState extends Equatable {
-  final Service<GetMoviesResponse> getMoviesService;
+  final Map<String, Service<GetMoviesResponse>> getMoviesServices;
   final Service<GetMovieResponse> getMovieService;
 
   MoviesState({
-    Service<GetMoviesResponse>? getMoviesService,
+    Map<String, Service<GetMoviesResponse>>? getMoviesServices,
     Service<GetMovieResponse>? getMovieService,
-  })  : getMoviesService = getMoviesService ?? Service<GetMoviesResponse>(),
+  })  : getMoviesServices =
+            getMoviesServices ?? <String, Service<GetMoviesResponse>>{},
         getMovieService = getMovieService ?? Service<GetMovieResponse>();
 
   MoviesState copyWith({
-    Service<GetMoviesResponse>? getMoviesService,
+    Map<String, Service<GetMoviesResponse>>? getMoviesServices,
     Service<GetMovieResponse>? getMovieService,
   }) {
     return MoviesState(
-      getMoviesService: getMoviesService ?? this.getMoviesService,
+      getMoviesServices: getMoviesServices ?? this.getMoviesServices,
       getMovieService: getMovieService ?? this.getMovieService,
     );
   }
 
   @override
   List<Object?> get props => [
-        getMoviesService,
+        getMoviesServices,
         getMovieService,
       ];
 }

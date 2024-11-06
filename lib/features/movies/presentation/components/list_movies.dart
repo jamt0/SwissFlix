@@ -10,7 +10,9 @@ import 'package:swissflix/features/movies/presentation/widgets/card_movie.dart';
 import 'package:swissflix/styles/custom_colors.dart';
 
 class ListMovies extends StatefulWidget {
-  const ListMovies({super.key});
+  final MovieCategory category;
+
+  const ListMovies({super.key, required this.category});
 
   @override
   State<ListMovies> createState() => _ListMoviesState();
@@ -50,6 +52,7 @@ class _ListMoviesState extends State<ListMovies> {
             GetMoviesEvent(
               getMoviesRequest: GetMoviesRequest(
                 page: (pageKey).toString(),
+                category: widget.category,
               ),
             ),
           );
@@ -64,26 +67,39 @@ class _ListMoviesState extends State<ListMovies> {
 
     return BlocListener<MoviesBloc, MoviesState>(
       listenWhen: (previous, current) =>
-          previous.getMoviesService.requestStatus == RequestStatus.loading &&
-          current.getMoviesService.requestStatus == RequestStatus.success,
+          previous.getMoviesServices[widget.category.name]?.requestStatus ==
+              RequestStatus.loading &&
+          current.getMoviesServices[widget.category.name]?.requestStatus ==
+              RequestStatus.success,
       listener: (context, state) {
-        if (state.getMoviesService.requestStatus == RequestStatus.success) {
-          if ((state.getMoviesService.requestResponse?.movies ?? []).length <
+        if (state.getMoviesServices[widget.category.name]?.requestStatus ==
+            RequestStatus.success) {
+          if ((state.getMoviesServices[widget.category.name]?.requestResponse
+                          ?.movies ??
+                      [])
+                  .length <
               pageSize) {
-            pagingController.appendLastPage(
-                state.getMoviesService.requestResponse?.movies ?? []);
+            pagingController.appendLastPage(state
+                    .getMoviesServices[widget.category.name]
+                    ?.requestResponse
+                    ?.movies ??
+                []);
           } else {
             pageNumber = pageNumber + 1;
 
             pagingController.appendPage(
-                state.getMoviesService.requestResponse?.movies ?? [],
+                state.getMoviesServices[widget.category.name]?.requestResponse
+                        ?.movies ??
+                    [],
                 pageNumber);
           }
         }
 
-        if (state.getMoviesService.requestStatus == RequestStatus.failed) {
-          pagingController.error =
-              (state.getMoviesService.failure?.message ?? "Error");
+        if (state.getMoviesServices[widget.category.name]?.requestStatus ==
+            RequestStatus.failed) {
+          pagingController.error = (state
+                  .getMoviesServices[widget.category.name]?.failure?.message ??
+              "Error");
         }
       },
       child: Row(

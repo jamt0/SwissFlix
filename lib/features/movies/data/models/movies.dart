@@ -121,3 +121,9 @@ class Movie {
     );
   }
 }
+
+enum MovieCategory {
+  upcoming,
+  top_rated,
+  popular,
+}

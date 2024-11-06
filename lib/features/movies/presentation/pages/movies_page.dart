@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swissflix/features/movies/data/models/movies.dart';
 import 'package:swissflix/features/movies/presentation/components/list_movies.dart';
 import 'package:swissflix/styles/custom_colors.dart';
 import 'package:swissflix/styles/custom_text_styles.dart';
@@ -26,13 +27,17 @@ class MoviesPage extends StatelessWidget {
               child: Text("Populares",
                   style: CustomTextStyle.title(CustomColors.text)),
             ),
-            const ListMovies(),
+            const ListMovies(
+              category: MovieCategory.popular,
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 50, left: 20),
               child: Text("Mejor Calificadas ",
                   style: CustomTextStyle.title(CustomColors.text)),
             ),
-            const ListMovies(),
+            const ListMovies(
+              category: MovieCategory.top_rated,
+            ),
             Padding(
               padding: const EdgeInsets.only(
                 top: 50,
@@ -41,7 +46,9 @@ class MoviesPage extends StatelessWidget {
               child: Text("Próximas Estrenos",
                   style: CustomTextStyle.title(CustomColors.text)),
             ),
-            const ListMovies(),
+            const ListMovies(
+              category: MovieCategory.upcoming,
+            ),
             const Padding(padding: EdgeInsets.only(bottom: 50)),
           ],
         ),

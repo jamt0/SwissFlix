@@ -25,11 +25,15 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
     Emitter<MoviesState> emit,
   ) async {
     emit(
-      state.copyWith(
-        getMoviesService: state.getMoviesService.copyWith(
+      state.copyWith(getMoviesServices: {
+        ...state.getMoviesServices,
+        event.getMoviesRequest.category.name:
+            ((state.getMoviesServices[event.getMoviesRequest.category.name]) ??
+                    Service<GetMoviesResponse>())
+                .copyWith(
           requestStatus: RequestStatus.loading,
         ),
-      ),
+      }),
     );
     await moviesApi
         .getMovies(getMoviesRequest: event.getMoviesRequest)
@@ -37,33 +41,47 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
       either.fold(
         (failure) {
           emit(
-            state.copyWith(
-              getMoviesService: state.getMoviesService.copyWith(
+            state.copyWith(getMoviesServices: {
+              ...state.getMoviesServices,
+              event.getMoviesRequest.category.name: ((state.getMoviesServices[
+                          event.getMoviesRequest.category.name]) ??
+                      Service<GetMoviesResponse>())
+                  .copyWith(
                 requestStatus: RequestStatus.failed,
                 failure: failure,
               ),
-            ),
+            }),
           );
         },
         (response) async {
           emit(
-            state.copyWith(
-              getMoviesService: state.getMoviesService.copyWith(
+            state.copyWith(getMoviesServices: {
+              ...state.getMoviesServices,
+              event.getMoviesRequest.category.name: ((state.getMoviesServices[
+                          event.getMoviesRequest.category.name]) ??
+                      Service<GetMoviesResponse>())
+                  .copyWith(
                 requestStatus: RequestStatus.success,
                 requestResponse: response,
               ),
-            ),
+            }),
           );
         },
       );
     }).catchError(
       (error) {
-        emit(state.copyWith(
-          getMoviesService: state.getMoviesService.copyWith(
-            requestStatus: RequestStatus.failed,
-            failure: Failure(message: error.toString()),
-          ),
-        ));
+        emit(
+          state.copyWith(getMoviesServices: {
+            ...state.getMoviesServices,
+            event.getMoviesRequest.category.name: ((state.getMoviesServices[
+                        event.getMoviesRequest.category.name]) ??
+                    Service<GetMoviesResponse>())
+                .copyWith(
+              requestStatus: RequestStatus.failed,
+              failure: Failure(message: error.toString()),
+            ),
+          }),
+        );
       },
     );
   }
