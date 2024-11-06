@@ -34,7 +34,6 @@ class _MoviePageState extends State<MoviePage> {
   Widget build(BuildContext context) {
     return BlocBuilder<MoviesBloc, MoviesState>(
       builder: (context, state) {
-        print(state.getMovieService.requestStatus);
         if (state.getMovieService.requestStatus == RequestStatus.initial) {
           return Container();
         }

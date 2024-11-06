@@ -15,13 +15,14 @@ class MoviesPage extends StatelessWidget {
           style: CustomTextStyle.title(CustomColors.primary),
         ),
       ),
-      body: const CustomScrollView(
-        slivers: [
-          ListMovies(),
-          SliverToBoxAdapter(
-            child: Padding(padding: EdgeInsets.only(bottom: 20)),
-          ),
-        ],
+      body: const SingleChildScrollView(
+        child: Column(
+          children: [
+            ListMovies(),
+            ListMovies(),
+            ListMovies(),
+          ],
+        ),
       ),
     );
   }

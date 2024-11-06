@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -18,8 +19,26 @@ class _ListMoviesState extends State<ListMovies> {
   final PagingController<int, Movie> pagingController =
       PagingController(firstPageKey: 1);
 
+  final ScrollController scrollController = ScrollController();
+
   final pageSize = 10;
   late int pageNumber;
+
+  void _scrollLeft(ScrollController controller) {
+    controller.animateTo(
+      controller.offset - 500,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void _scrollRight(ScrollController controller) {
+    controller.animateTo(
+      controller.offset + 500,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
 
   @override
   void initState() {
@@ -40,6 +59,8 @@ class _ListMoviesState extends State<ListMovies> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return BlocListener<MoviesBloc, MoviesState>(
       listenWhen: (previous, current) =>
           previous.getMoviesService.requestStatus == RequestStatus.loading &&
@@ -64,13 +85,40 @@ class _ListMoviesState extends State<ListMovies> {
               (state.getMoviesService.failure?.message ?? "Error");
         }
       },
-      child: PagedSliverList<int, Movie>(
-        pagingController: pagingController,
-        builderDelegate: PagedChildBuilderDelegate<Movie>(
-          itemBuilder: (context, item, index) => CardMovie(
-            movie: item,
+      child: Row(
+        children: [
+          if (kIsWeb && screenWidth > 500)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () => _scrollLeft(scrollController),
+              ),
+            ),
+          Expanded(
+            child: SizedBox(
+              height: kIsWeb && screenWidth > 500 ? 350 : 185,
+              child: PagedListView<int, Movie>(
+                pagingController: pagingController,
+                scrollController: scrollController,
+                builderDelegate: PagedChildBuilderDelegate<Movie>(
+                  itemBuilder: (context, item, index) => CardMovie(
+                    movie: item,
+                  ),
+                ),
+                scrollDirection: Axis.horizontal,
+              ),
+            ),
           ),
-        ),
+          if (kIsWeb && screenWidth > 500)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: IconButton(
+                icon: const Icon(Icons.arrow_forward),
+                onPressed: () => _scrollRight(scrollController),
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -78,6 +126,7 @@ class _ListMoviesState extends State<ListMovies> {
   @override
   void dispose() {
     pagingController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 }

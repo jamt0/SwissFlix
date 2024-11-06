@@ -1,9 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:swissflix/core/utils/constants/urls.dart';
 import 'package:swissflix/features/movies/data/models/movies.dart';
 import 'package:swissflix/routes/router.dart';
-import 'package:swissflix/styles/custom_colors.dart';
-import 'package:swissflix/styles/custom_text_styles.dart';
 
 class CardMovie extends StatefulWidget {
   final Movie movie;
@@ -20,48 +19,34 @@ class CardMovie extends StatefulWidget {
 class _CardMovieState extends State<CardMovie> {
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    double widthCard = kIsWeb && screenWidth > 500 ? 180 : 90;
+    double heightCard = kIsWeb && screenWidth > 500 ? 300 : 150;
+
     return Padding(
       padding: const EdgeInsets.only(top: 28.0, left: 18, right: 18),
       child: GestureDetector(
         onTap: () {
           router.go("${NamesRoustes.movie}/${widget.movie.id}");
         },
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: CustomColors.primary,
-              width: 1.0,
+        child: Column(
+          children: [
+            Container(
+              width: widthCard,
+              height: heightCard,
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(10.0),
+                image: DecorationImage(
+                  image: NetworkImage(widget.movie.posterPath != null
+                      ? "$imgurl${widget.movie.posterPath}"
+                      : " "),
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
-            borderRadius: BorderRadius.circular(18.0),
-          ),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(18.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(widget.movie.title ?? "",
-                        style: CustomTextStyle.title(Colors.black)),
-                  ],
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                height: 130,
-                decoration: BoxDecoration(
-                  color: CustomColors.primary,
-                  borderRadius: BorderRadius.circular(10.0),
-                  image: DecorationImage(
-                    image: NetworkImage(widget.movie.backdropPath != null
-                        ? "$imgurl${widget.movie.posterPath}"
-                        : " "),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ],
-          ),
+          ],
         ),
       ),
     );

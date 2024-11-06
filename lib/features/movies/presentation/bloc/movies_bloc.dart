@@ -94,7 +94,6 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
           );
         },
         (response) async {
-          print(response);
           emit(
             state.copyWith(
               getMovieService: state.getMovieService.copyWith(
