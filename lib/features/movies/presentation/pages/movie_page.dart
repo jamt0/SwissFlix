@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swissflix/core/utils/constants/enums.dart';
@@ -35,27 +36,36 @@ class _MoviePageState extends State<MoviePage> {
     return BlocBuilder<MoviesBloc, MoviesState>(
       builder: (context, state) {
         if (state.getMovieService.requestStatus == RequestStatus.initial) {
-          return Container();
+          return Container(
+            color: CustomColors.background,
+          );
         }
 
         if (state.getMovieService.requestStatus == RequestStatus.loading) {
-          return const Center(child: CircularProgressIndicator());
+          return Container(
+            color: CustomColors.background,
+            child: const Center(
+              child: CircularProgressIndicator(
+                color: CustomColors.primary,
+              ),
+            ),
+          );
         }
 
         var movie = state.getMovieService.requestResponse?.movie;
+
+        double screenWidth = MediaQuery.of(context).size.width;
+
         return Scaffold(
+          backgroundColor: CustomColors.background,
           appBar: AppBar(
-            title: Text(
-              "Movie",
-              style: CustomTextStyle.title(CustomColors.primary),
-            ),
+            backgroundColor: Colors.black,
             leading: IconButton(
               icon: const Icon(
                 Icons.arrow_back,
                 color: CustomColors.primary,
               ),
               onPressed: () {
-                //TODO: Fix error bucle navegacion
                 if (router.canPop()) {
                   router.pop(context);
                 } else {
@@ -65,37 +75,39 @@ class _MoviePageState extends State<MoviePage> {
             ),
           ),
           body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 18.0, bottom: 18),
-                    child: Container(
-                      width: double.infinity,
-                      height: 130,
-                      decoration: BoxDecoration(
-                        color: CustomColors.primary,
-                        borderRadius: BorderRadius.circular(10.0),
-                        image: DecorationImage(
-                          image: NetworkImage("$imgurl${movie?.posterPath}"),
-                          fit: BoxFit.cover,
-                        ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 18),
+                  child: Container(
+                    width: double.infinity,
+                    height: kIsWeb && screenWidth > 500 ? 400 : 200,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage("$imgurl${movie?.posterPath}"),
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 18.0, top: 18),
-                    child: Text(movie?.title ?? "",
-                        style: CustomTextStyle.title(Colors.black)),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 18.0, top: 18),
+                        child: Text(movie?.title ?? "",
+                            style: CustomTextStyle.title(CustomColors.text)),
+                      ),
+                      Text(
+                        movie?.overview ?? "",
+                        style: CustomTextStyle.body(CustomColors.text),
+                      ),
+                    ],
                   ),
-                  Text(
-                    movie?.overview ?? "",
-                    style: CustomTextStyle.body(Colors.black),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         );

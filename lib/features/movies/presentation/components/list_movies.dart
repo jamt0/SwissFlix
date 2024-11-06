@@ -7,6 +7,7 @@ import 'package:swissflix/features/movies/data/models/movies.dart';
 import 'package:swissflix/features/movies/data/models/request/movies_request.dart';
 import 'package:swissflix/features/movies/presentation/bloc/movies_bloc.dart';
 import 'package:swissflix/features/movies/presentation/widgets/card_movie.dart';
+import 'package:swissflix/styles/custom_colors.dart';
 
 class ListMovies extends StatefulWidget {
   const ListMovies({super.key});
@@ -91,7 +92,10 @@ class _ListMoviesState extends State<ListMovies> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               child: IconButton(
-                icon: const Icon(Icons.arrow_back),
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: CustomColors.text,
+                ),
                 onPressed: () => _scrollLeft(scrollController),
               ),
             ),
@@ -102,6 +106,28 @@ class _ListMoviesState extends State<ListMovies> {
                 pagingController: pagingController,
                 scrollController: scrollController,
                 builderDelegate: PagedChildBuilderDelegate<Movie>(
+                  newPageProgressIndicatorBuilder: (context) {
+                    return const Center(
+                      child: SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: CircularProgressIndicator(
+                          color: CustomColors.primary,
+                        ),
+                      ),
+                    );
+                  },
+                  firstPageProgressIndicatorBuilder: (context) {
+                    return const Center(
+                      child: SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: CircularProgressIndicator(
+                          color: CustomColors.primary,
+                        ),
+                      ),
+                    );
+                  },
                   itemBuilder: (context, item, index) => CardMovie(
                     movie: item,
                   ),
@@ -114,7 +140,10 @@ class _ListMoviesState extends State<ListMovies> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: IconButton(
-                icon: const Icon(Icons.arrow_forward),
+                icon: const Icon(
+                  Icons.arrow_forward,
+                  color: CustomColors.text,
+                ),
                 onPressed: () => _scrollRight(scrollController),
               ),
             ),

@@ -9,18 +9,40 @@ class MoviesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: CustomColors.background,
       appBar: AppBar(
+        backgroundColor: Colors.black,
         title: Text(
-          'Movies',
+          'SwissFLix',
           style: CustomTextStyle.title(CustomColors.primary),
         ),
       ),
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ListMovies(),
-            ListMovies(),
-            ListMovies(),
+            Padding(
+              padding: const EdgeInsets.only(top: 30, left: 20),
+              child: Text("Populares",
+                  style: CustomTextStyle.title(CustomColors.text)),
+            ),
+            const ListMovies(),
+            Padding(
+              padding: const EdgeInsets.only(top: 50, left: 20),
+              child: Text("Mejor Calificadas ",
+                  style: CustomTextStyle.title(CustomColors.text)),
+            ),
+            const ListMovies(),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 50,
+                left: 20,
+              ),
+              child: Text("Próximas Estrenos",
+                  style: CustomTextStyle.title(CustomColors.text)),
+            ),
+            const ListMovies(),
+            const Padding(padding: EdgeInsets.only(bottom: 50)),
           ],
         ),
       ),
